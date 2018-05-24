@@ -55,6 +55,11 @@ def make_parser():
         # ("elem : unaryop", identity),
         # ("elem : lambda", identity),
         # ("elem : constructor", identity),
+        
+        # Elementos record
+        ("elemen_record : NOME ':' value", lambda x,y : [x,y]),
+
+
 
         # Valores
         ("value : atom", identity),
@@ -70,7 +75,7 @@ def make_parser():
         ("atom : TYPENAME", Enum),
         ("atom : NAME", Name),
         ("atom : list", identity),
-        # ("atom : record", identity),
+        ("atom : record", identity),
 
         # Chamada de função
         ("fcall : value '(' ')'", lambda x: Call(x, [])),
@@ -105,13 +110,18 @@ def make_parser():
         ("tuple : '(' ')'", lambda: Expr.Tuple([])),
         ("tuple : '(' items ')'", lambda x: Expr.Tuple(tuple(x)),
 
-
         ("items: elem", lambda x: [x]),
         ("items: elem ',' items", lambda x, z: [x, *z]),
         ("items: elem ',' items ','", lambda x, z: [x, *z]),
 
         # Records
-        # ("record : ...", ...),
+        ("record : '{' '}'", lambda : Expr.Record([])),
+        ("record : '{' itens_record '}'",lambda x :  Expr.Record((x)),
+
+        ("itens_record: elemen_record", lambda x: [x]),
+        ("itens_record: elemen_record ',' items", lambda x, z: [x, *z]),
+        ("itens_record: elemen_record ',' items ','", lambda x, z: [x, *z]),
+
 
         # Construtor
         # ("constructor : ...", ...),
